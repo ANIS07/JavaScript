@@ -12,6 +12,8 @@ window.onload = function() // quand la fenêtre se carger lancer tout
     var widhInBlocks = canvasWidh/blockSize; //on raisonne en case et non en pixels
     var heightInBlocks = canvasHeight/blockSize; // nbre de bloc en largeur (utile pour les conditions de fin du jeu)
     
+    var score;
+    
     init();
     
     function init()  // fonction d'initialisation
@@ -26,6 +28,7 @@ window.onload = function() // quand la fenêtre se carger lancer tout
         
         snakee = new Snake([[6,4],[5,4],[4,4]],"right");
         pomme = new Apple([10,10]);
+        score = 0;
         refreshCanvas();
 
     }
@@ -37,12 +40,13 @@ window.onload = function() // quand la fenêtre se carger lancer tout
         
         if (snakee.checkCollision())
         {
-            // LOSE
+            gameOver()
         }
         else 
         {   
             if(snakee.isEatingApple(pomme))
             {
+                score +=1;
                 snakee.ateApple = true;
                 // il a bien mangé , on doit rajouter une autre pomme pas sur le coprs du serpent
                 do
@@ -55,13 +59,42 @@ window.onload = function() // quand la fenêtre se carger lancer tout
             ctx.clearRect(0,0,canvasWidh,canvasHeight); // on efface tt ce qui vient avant
             snakee.draw();
             pomme.draw();
+            pomme.draw();
+            drawScore();
             setTimeout(refreshCanvas,delay); // réappeler la fonction chaque seconde 
         }
         
         
     }
     
-    
+    function gameOver()
+    {
+        ctx.save();
+        
+        ctx.fillText("GAME OVER",5,15);
+        ctx.fillText("Push space to play again",5,30);
+        ctx.restore();
+    }
+        
+    function restart() 
+    {
+        // on recrée un nouveau serpent
+        // si on rapplelle init , a va crée un autre canvas
+        snakee = new Snake([[6,4],[5,4],[4,4]],"right");
+        pomme = new Apple([10,10]);
+        score = 0;
+        refreshCanvas();
+    }
+        
+        
+    function drawScore()
+    {
+        ctx.save();
+        ctx.fillText(score.toString(),5,canvasHeight - 15);
+        ctx.restore();
+    }
+        
+        
     function drawBlock(ctx,position) // position = array , pour dessiner un bloc du serpent
     {
         var xCoord = position[0]*blockSize;    // on tranforme en pixelle 
@@ -254,6 +287,9 @@ window.onload = function() // quand la fenêtre se carger lancer tout
             case 40:
                 newDirection = "down";
                 break;
+            case 32: // le code espace pour recommencer le jeu
+                restart();
+                return;
              default:
                     return ;
                 
