@@ -50,7 +50,14 @@ function SnakeGame(canvasWidh,canvasHeight,blockSize,delay)
     this.canvas = document.createElement('canvas');
     this.canvas.width = canvasWidh;
     this.canvas.height = canvasHeight;
-    this.canvas.style.border = "1px solid";
+    
+    // Style 
+    this.canvas.style.border = "30px solid gray"
+    this.canvas.style.margin = "50px auto"; // le centrer
+    this.canvas.style.margin = "50px auto"; // le centrer
+    this.canvas.style.display = "bloc";
+    this.canvas.style.backgroundColor = "#ddd";
+    
     document.body.appendChild(this.canvas); // accrocher tag dans le canvas (ce n'est pas une propriété)
     this.ctx = this.canvas.getContext('2d');   // MODIF
     
@@ -106,9 +113,10 @@ function SnakeGame(canvasWidh,canvasHeight,blockSize,delay)
                 
             }
             instance.ctx.clearRect(0,0,instance.canvas.width,instance.canvas.height); // on efface tt ce qui vient avant
+            instance.drawScore(); // on draw score avant pour que snake passe devant
             instance.snake.draw(instance.ctx,instance.blockSize); // tt ça à cause du time out
             instance.apple.draw(instance.ctx,instance.blockSize);
-            instance.drawScore();
+            
             timeout =setTimeout(refreshCanvas,delay); // réappeler la fonction chaque seconde 
         }
         
@@ -153,14 +161,35 @@ function SnakeGame(canvasWidh,canvasHeight,blockSize,delay)
     this.gameOver = function()
     {
         this.ctx.save();
-        this.ctx.fillText("GAME OVER",5,15);
-        this.ctx.fillText("Push space to play again",5,30);
+        
+        this.ctx.font = "bold 70px sans-serif";
+        this.ctx.fillStyle = "#000";
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = "middle";
+        this.ctx.strokeStyle = "white";
+        this.ctx.lineWidth = 5;
+        var centreX = this.canvas.width /2;
+        var centreY = this.canvas.height /2;
+        this.ctx.strokeText("GAME OVER",centreX,centreY-180); // le stroke autour
+        this.ctx.fillText("GAME OVER",centreX,centreY-180);
+        
+        this.ctx.font = "bold 30px sans-serif";
+        this.ctx.strokeText("Push space to play again",centreX,centreY-120); // le stroke autour
+        this.ctx.fillText("Push space to play again",centreX,centreY-120);
         this.ctx.restore();
     };
     this.drawScore = function()
     {
         this.ctx.save();
-        this.ctx.fillText(this.score.toString(),5,this.canvas.height - 15);
+        this.ctx.font = "bold 100px sans-serif";
+        this.ctx.fillStyle = "gray";
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = "middle";
+        // on veut centrer le score
+        var centreX = this.canvas.width /2;
+        var centreY = this.canvas.height /2;
+        
+        this.ctx.fillText(this.score.toString(),centreX,centreY);
         this.ctx.restore();
     };
     
