@@ -6,7 +6,7 @@ window.onload = function() // quand la fenêtre se carger lancer tout
     var blockSize = 30 ; // la taille d'une case du serpent
     
     var ctx;
-    var delay = 100 ; // 1 seconde
+    var delay = 90 ; // 1 seconde
     var snakee;
     var pomme;
     var widhInBlocks = canvasWidh/blockSize; //on raisonne en case et non en pixels
